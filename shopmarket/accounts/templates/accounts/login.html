@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Login — ShopMarket{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5">
+
+    <div class="card border-0 shadow-sm rounded-4 p-4 mt-4">
+      <div class="text-center mb-4">
+        <i class="bi bi-shop" style="font-size:2.5rem;color:#e94560"></i>
+        <h3 class="fw-bold mt-2">Welcome back</h3>
+        <p class="text-muted">Log in to your ShopMarket account</p>
+      </div>
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Username</label>
+          {{ form.username }}
+          {% if form.username.errors %}
+            <div class="text-danger small mt-1">{{ form.username.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Password</label>
+          {{ form.password }}
+          {% if form.password.errors %}
+            <div class="text-danger small mt-1">{{ form.password.errors }}</div>
+          {% endif %}
+        </div>
+
+        {% if form.non_field_errors %}
+          <div class="alert alert-danger py-2">
+            {{ form.non_field_errors }}
+          </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary w-100 mt-2 py-2 fw-semibold">
+          <i class="bi bi-box-arrow-in-right"></i> Log In
+        </button>
+      </form>
+
+      <hr class="my-4">
+      <p class="text-center text-muted mb-0">
+        Don't have an account?
+        <a href="{% url 'accounts:signup' %}" class="text-decoration-none fw-semibold" style="color:#e94560">
+          Sign up free
+        </a>
+      </p>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

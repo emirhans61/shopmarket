@@ -1,0 +1,111 @@
+{% {% extends "base.html" %}
+
+{% block title %}Checkout — ShopMarket{% endblock %}
+
+{% block content %}
+
+<div class="mb-4">
+  <h2 class="fw-bold mb-0"><i class="bi bi-bag-check"></i> Checkout</h2>
+</div>
+
+<div class="row g-4">
+
+  <!-- Shipping form -->
+  <div class="col-lg-7">
+    <div class="card border-0 shadow-sm rounded-3 p-4">
+      <h5 class="fw-bold mb-4">
+        <i class="bi bi-truck"></i> Shipping Details
+      </h5>
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Full Name</label>
+          {{ form.full_name }}
+          {% if form.full_name.errors %}
+            <div class="text-danger small">{{ form.full_name.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Address</label>
+          {{ form.address }}
+          {% if form.address.errors %}
+            <div class="text-danger small">{{ form.address.errors }}</div>
+          {% endif %}
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-7">
+            <label class="form-label fw-semibold">City</label>
+            {{ form.city }}
+            {% if form.city.errors %}
+              <div class="text-danger small">{{ form.city.errors }}</div>
+            {% endif %}
+          </div>
+          <div class="col-5">
+            <label class="form-label fw-semibold">Postal Code</label>
+            {{ form.postal_code }}
+            {% if form.postal_code.errors %}
+              <div class="text-danger small">{{ form.postal_code.errors }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Phone <span class="text-muted fw-normal">(optional)</span></label>
+          {{ form.phone }}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold fs-5">
+          <i class="bi bi-lock-fill"></i> Place Order — ${{ cart.get_total }}
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Order summary -->
+  <div class="col-lg-5">
+    <div class="card border-0 shadow-sm rounded-3 p-4">
+      <h5 class="fw-bold mb-4"><i class="bi bi-receipt"></i> Order Summary</h5>
+
+      {% for item in items %}
+      <div class="d-flex align-items-center gap-3 mb-3">
+        {% if item.product.image %}
+          <img src="{{ item.product.image.url }}"
+               style="width:50px;height:50px;object-fit:cover;border-radius:8px"
+               alt="{{ item.product.name }}">
+        {% else %}
+          <div class="bg-light rounded-2 d-flex align-items-center justify-content-center"
+               style="width:50px;height:50px">
+            <i class="bi bi-image text-muted"></i>
+          </div>
+        {% endif %}
+        <div class="flex-grow-1">
+          <div class="fw-semibold small">{{ item.product.name }}</div>
+          <div class="text-muted small">Qty: {{ item.quantity }}</div>
+        </div>
+        <div class="fw-semibold" style="color:#e94560">${{ item.get_subtotal }}</div>
+      </div>
+      {% endfor %}
+
+      <hr>
+
+      <div class="d-flex justify-content-between mb-1">
+        <span class="text-muted">Subtotal</span>
+        <span>${{ cart.get_total }}</span>
+      </div>
+      <div class="d-flex justify-content-between mb-3">
+        <span class="text-muted">Shipping</span>
+        <span class="text-success">Free</span>
+      </div>
+      <div class="d-flex justify-content-between fw-bold fs-5">
+        <span>Total</span>
+        <span style="color:#e94560">${{ cart.get_total }}</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
